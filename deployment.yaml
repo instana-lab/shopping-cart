@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: shopping
+  name: shopping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shopping
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: shopping
+    spec:
+      containers:
+      - image: de.icr.io/shopping/shoppingapp:1.0
+        name: shoppingapp
+        # agent networking access
+        env:
+          - name: VUE_APP_AUTH_URL
+            value: "http://localhost:3000/login"
+          - name: VUE_APP_PRODUCTS_URL
+            value: "http://159.122.108.236:8000/products"
+          - name: INSTANA_SERVICE_NAME
+            value: "shopping_nginx"
+          - name: INSTANA_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: shopping
+  name: shopping
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: shopping
+  type: LoadBalancer
+status:
+  loadBalancer: {}

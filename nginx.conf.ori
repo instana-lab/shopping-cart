@@ -1,0 +1,62 @@
+# nginx.conf modified
+worker_processes auto;
+
+#INSTANA CONFIG
+load_module modules/ngx_http_opentracing_module.so;
+env INSTANA_SERVICE_NAME;
+env INSTANA_AGENT_HOST;
+env INSTANA_AGENT_PORT;
+env INSTANA_MAX_BUFFERED_SPANS;
+env INSTANA_DEV;
+#INSTANA CONFIG
+
+pid /tmp/nginx.pid;
+
+events {
+ worker_connections 1024;
+}
+
+http {
+ include /etc/nginx/mime.types;
+ client_body_temp_path /tmp/client_temp;
+ proxy_temp_path       /tmp/proxy_temp_path;
+ fastcgi_temp_path     /tmp/fastcgi_temp;
+ uwsgi_temp_path       /tmp/uwsgi_temp;
+ scgi_temp_path        /tmp/scgi_temp;
+
+ #INSTANA CONFIG
+ opentracing_load_tracer /usr/local/lib/instana/libinstana_sensor.so /etc/instana-config.json;
+ opentracing_propagate_context;
+ #INSTANA CONFIG
+ server {
+   # expose /nginx_status but on a different port to avoid
+   # external visibility / conflicts with the app.
+   listen 8090;
+   location /nginx_status {
+     stub_status on;
+     access_log off;
+   }
+   location / {
+     root /dev/null;
+   }
+ }
+ server {
+   listen 8080;
+   server_name _;
+
+   index index.html;
+   error_log  /tmp/error.log;
+   access_log /tmp/access.log;
+
+   location / {
+     root /code;
+     try_files $uri /index.html;
+   }
+   #location /nginx_status {
+   #  stub_status  on;
+   #  access_log   off;
+   #  allow all;
+   #}
+ }
+}
+
