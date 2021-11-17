@@ -1,0 +1,5 @@
+#!/bin/bash
+cat <<EOF
+window.VUE_APP_AUTH_URL="${VUE_APP_AUTH_URL}"
+window.VUE_APP_PRODUCTS_URL="${VUE_APP_PRODUCTS_URL}"
+EOF
