@@ -1,2 +1,5 @@
 window.VUE_APP_AUTH_URL="http://localhost:3000/login"
 window.VUE_APP_PRODUCTS_URL="http://localhost:8000/products"
+window.INSTANA_reportingUrl="http://159.8.2.250:2999/"
+window.INSTANA_eumjs="http://159.8.2.250:2999/eum.min.js"
+window.INSTANA_key="wKKD2jkSSGqt9-Hbpx1Wow"
