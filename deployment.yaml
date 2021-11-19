@@ -26,6 +26,12 @@ spec:
             value: "http://localhost:3000/login"
           - name: VUE_APP_PRODUCTS_URL
             value: "http://localhost:8000/products"
+          - name: INSTANA_reportingUrl
+            value: ""
+          - name: INSTANA_eumjs
+            value: ""
+          - name: INSTANA_key
+            value: ""
           - name: INSTANA_SERVICE_NAME
             value: "shopping_nginx"
           - name: INSTANA_AGENT_HOST
