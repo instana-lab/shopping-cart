@@ -28,18 +28,7 @@ http {
  opentracing_load_tracer /usr/local/lib/instana/libinstana_sensor.so /etc/instana-config.json;
  opentracing_propagate_context;
  #INSTANA CONFIG
- server {
-   # expose /nginx_status but on a different port to avoid
-   # external visibility / conflicts with the app.
-   listen 8090;
-   location /nginx_status {
-     stub_status on;
-     access_log off;
-   }
-   location / {
-     root /dev/null;
-   }
- }
+ 
  server {
    listen 8080;
    server_name _;
